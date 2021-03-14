@@ -1,0 +1,1 @@
+There are customers and they each have an address.

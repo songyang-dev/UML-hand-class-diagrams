@@ -1,0 +1,1 @@
+A HTTP context uses a request.

@@ -1,0 +1,1 @@
+Every company has one location. Every location has an office.

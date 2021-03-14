@@ -1,0 +1,1 @@
+For every customer, there can be any amount of addresses.

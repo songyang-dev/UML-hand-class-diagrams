@@ -1,0 +1,1 @@
+All customers have an address. Each address has an address line.

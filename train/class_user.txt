@@ -1,0 +1,1 @@
+A user has a counter, a forename, a surname, a hashed password, and a salt. Each user can login with their password and log out. Users can also register.
