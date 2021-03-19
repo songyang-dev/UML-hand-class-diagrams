@@ -1,0 +1,8 @@
+[Hospital]+- 1..*[ParkingSpot]
+[Hospital]+- 1[HelicopterPad]
+[Hospital]+- 1[Cafeteria]
+[ParkingSpot]-0..1>[Vehicle]
+[HelicopterPad]1--1>[Helicopter]
+[Patient]comes-.->[ParkingSpot]
+[Patient]comes-.->[HelicopterPad]
+[Patient|walkIn()]

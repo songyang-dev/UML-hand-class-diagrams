@@ -1,0 +1,1 @@
+All lamps have a lightbulb. A lightbulb has a filament.

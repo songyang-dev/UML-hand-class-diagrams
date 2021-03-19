@@ -1,0 +1,4 @@
+[Company]++-0..*[Employee]
+[Company]++-0..*[Shareholder]
+[Company]++-1..*[Owner]
+[Shareholder|dividend()]depends-.->[Company|grow()]

@@ -1,0 +1,2 @@
+[Product]<>->[Packaging]
+[Packaging]+->[Trademark]

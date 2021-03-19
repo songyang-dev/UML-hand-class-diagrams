@@ -1,0 +1,5 @@
+[DataStructure]^[List]
+[<<IOrdering>>]^-.-[List]
+[List]^[ArrayList]
+[List]^[LinkedList]
+[DataStructure]^[Map]

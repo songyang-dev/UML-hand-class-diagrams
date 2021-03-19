@@ -1,0 +1,1 @@
+Every letter has a destination. A destination has an address.

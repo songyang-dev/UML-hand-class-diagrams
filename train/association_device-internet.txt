@@ -1,0 +1,1 @@
+Every device has an internet connection, which has an internet service provider.

@@ -6,4 +6,4 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-yuml -i $1 -o last_render.png
+yuml -i $1 -s nofunky -o last_render.png -v

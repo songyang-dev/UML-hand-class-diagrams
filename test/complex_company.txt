@@ -1,0 +1,1 @@
+A company has employees, shareholders and owners. Each employee earns a salary, whereas owners earn profit. Shareholders earn dividend when the company grows.

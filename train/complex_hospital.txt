@@ -1,0 +1,1 @@
+A hospital has several parking spots, a helicopter pad and a cafeteria. The parking spots can only be free or taken by one vehicle at a time. The helicopter pad is reserved for the only helicopter in the hospital. Patients come in through the parking spots or the helicopter pad. They may also walk in.

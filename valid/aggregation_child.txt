@@ -1,0 +1,1 @@
+Each child has parents. Each parent has their own parents.

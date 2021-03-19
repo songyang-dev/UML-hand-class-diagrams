@@ -1,0 +1,1 @@
+The die has faces and can roll. It can also be biased.

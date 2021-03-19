@@ -1,0 +1,1 @@
+For each boolean variable, there are only two values.

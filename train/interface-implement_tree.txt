@@ -1,0 +1,1 @@
+A regular tree is a tree.

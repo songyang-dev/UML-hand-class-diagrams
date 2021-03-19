@@ -1,0 +1,1 @@
+A pet has a name, a preference and date of birth. The pet can eat, sleep and play.

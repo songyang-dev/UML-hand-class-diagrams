@@ -1,0 +1,1 @@
+A product can be pre-ordered or retired.

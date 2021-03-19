@@ -1,0 +1,1 @@
+A worker can have a cellphone number and a fax number.

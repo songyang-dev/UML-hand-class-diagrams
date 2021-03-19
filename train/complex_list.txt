@@ -1,0 +1,1 @@
+A list is a data structure that implements ordering. An array list is a kind of list. A linked list is also a kind of list. A map is a data structure but it does not have ordering.
