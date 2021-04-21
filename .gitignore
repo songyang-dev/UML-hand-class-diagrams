@@ -1,2 +1,8 @@
 last_render.png
 .vscode
+__pycache__
+
+build/
+.antlr/
+parser.output
+tokenizer/parser.output
