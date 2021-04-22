@@ -24,7 +24,7 @@
 "<>" return tAGGREGATION;
 "+" return '+';
 "++" return tCOMPOSITION;
-"^" return tINHERITANCE;
+"^" return '^';
 "<" return tLEFTARROW;
 ">" return tRIGHTARROW;
 "(" return '(';
@@ -32,18 +32,14 @@
 "#" return '#';
 "." return '.';
 "*" return '*';
+"," return ',';
 
 [0-9]|[1-9][0-9]* {
     yylval.int_val = atoi(yytext);
     return tINTVAL;
 }
 
-[a-zA-Z_][a-zA-Z0-9_]* { 
-	yylval.string_val = strdup(yytext);
-	return tIDENTIFIER;
-}
-
-[a-zA-Z0-9_()]* {
+[a-zA-Z0-9_]* {
     yylval.string_val = strdup(yytext);
 	return tSTRING;
 }

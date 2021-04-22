@@ -24,6 +24,7 @@ do
         if [ $? -ne 0 ]
         then
             printf "${RED}Problem${NC} in $file\n"
+            cat $file
             exit 1
         fi
     done

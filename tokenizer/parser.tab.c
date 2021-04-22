@@ -52,30 +52,26 @@ extern int yydebug;
   enum yytokentype
   {
     tINTVAL = 258,
-    tIDENTIFIER = 259,
-    tSTRING = 260,
-    tINTERFACEOPEN = 261,
-    tINTERFACECLOSE = 262,
-    tAGGREGATION = 263,
-    tCOMPOSITION = 264,
-    tINHERITANCE = 265,
-    tLEFTARROW = 266,
-    tRIGHTARROW = 267,
-    tDOTLINE = 268
+    tSTRING = 259,
+    tINTERFACEOPEN = 260,
+    tINTERFACECLOSE = 261,
+    tAGGREGATION = 262,
+    tCOMPOSITION = 263,
+    tLEFTARROW = 264,
+    tRIGHTARROW = 265,
+    tDOTLINE = 266
   };
 #endif
 /* Tokens.  */
 #define tINTVAL 258
-#define tIDENTIFIER 259
-#define tSTRING 260
-#define tINTERFACEOPEN 261
-#define tINTERFACECLOSE 262
-#define tAGGREGATION 263
-#define tCOMPOSITION 264
-#define tINHERITANCE 265
-#define tLEFTARROW 266
-#define tRIGHTARROW 267
-#define tDOTLINE 268
+#define tSTRING 259
+#define tINTERFACEOPEN 260
+#define tINTERFACECLOSE 261
+#define tAGGREGATION 262
+#define tCOMPOSITION 263
+#define tLEFTARROW 264
+#define tRIGHTARROW 265
+#define tDOTLINE 266
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -88,7 +84,7 @@ union YYSTYPE
 	char *string_val;
 	EXP *exp;
 
-#line 92 "parser.tab.c" /* yacc.c:1909  */
+#line 88 "parser.tab.c" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

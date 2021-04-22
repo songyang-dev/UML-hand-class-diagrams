@@ -26,8 +26,8 @@ void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno,
 }
 
 %token <int_val> tINTVAL
-%token <string_val> tIDENTIFIER tSTRING
-%token tINTERFACEOPEN tINTERFACECLOSE tAGGREGATION tCOMPOSITION tINHERITANCE tLEFTARROW tRIGHTARROW tDOTLINE
+%token <string_val> tSTRING
+%token tINTERFACEOPEN tINTERFACECLOSE tAGGREGATION tCOMPOSITION tLEFTARROW tRIGHTARROW tDOTLINE
 
 %left '-' tDOTLINE
 
@@ -52,12 +52,17 @@ umlClass: boxName       {printf("Entering uml class: boxName\n");}
 connection: dashAnnotationLeft dashType dashAnnotationRight    {printf("Entering connection: dashType and annotations\n");}
     ;
 
-boxName: tIDENTIFIER    {printf("Entering box name\n");}
-    |   tINTERFACEOPEN tIDENTIFIER tINTERFACECLOSE ';' tIDENTIFIER  {printf("Entering box name\n");}
+boxName: tSTRING    {printf("Entering box name\n");}
+    |   tINTERFACEOPEN tSTRING tINTERFACECLOSE ';' tSTRING  {printf("Entering box name\n");}
+    |   tINTERFACEOPEN tSTRING tINTERFACECLOSE  {printf("Entering box name\n");}
     ;
 
 dashType: '-'   {printf("Entering dash type\n");}
+    |   '-' '-' {printf("Entering dash type\n");}
     |   tDOTLINE    {printf("Entering dash type\n");}
+    |   '^' '-'    {printf("Entering dash type\n");}
+    |   '^'    {printf("Entering dash type\n");}
+    |   '^' tDOTLINE    {printf("Entering dash type\n");}
     ;
 
 dashAnnotationLeft: annotation  {printf("Entering dash annotation left\n");}
@@ -72,16 +77,21 @@ dashAnnotationRight: annotation  {printf("Entering dash annotation right\n");}
     |
     ;
 
-annotation: stringSequence      {printf("Entering annotation: string sequence\n");}
-    |   tINTVAL '.' '.' '*'     {printf("Entering annotation: multiplicity\n");}
-    |   tINTVAL '.' '.' tINTVAL {printf("Entering annotation: multiplicity\n");}
-    |   tINTVAL                 {printf("Entering annotation: multiplicity\n");}
+annotation: stringSequence  {printf("Entering annotation: string sequence\n");}
+    |   multiplicity    {printf("Entering annotation: multiplicity\n");}
+    |   stringSequence multiplicity {printf("Entering annotation: string sequence and multiplicity\n");}
+    ;
+
+multiplicity:   tINTVAL '.' '.' '*'     {printf("Entering multiplicity\n");}
+    |   tINTVAL '.' '.' tINTVAL {printf("Entering multiplicity\n");}
+    |   tINTVAL                 {printf("Entering multiplicity\n");}
+    |   '*'                     {printf("Entering multiplicity\n");}
     ;
 
 end: tAGGREGATION   {printf("Entering end\n");}
     |   '+'         {printf("Entering end\n");}
     |   tCOMPOSITION    {printf("Entering end\n");}
-    |   tINHERITANCE    {printf("Entering end\n");}
+    // |   '^'    {printf("Entering end\n");}
     |   tLEFTARROW  {printf("Entering end\n");}
     |   tRIGHTARROW {printf("Entering end\n");}
     ;
@@ -90,16 +100,22 @@ umlClassDescription: section {printf("Entering uml class description\n");}
     |   section '|' umlClassDescription {printf("Entering uml class description: tSTRING | next\n");}
     ;
 
-section: access tIDENTIFIER {printf("Entering section: field\n");}
-    |   access tIDENTIFIER '(' ')'  {printf("Entering section: method\n");}
-    |   access tIDENTIFIER ';' section  {printf("Entering section: field next\n");}
-    |   access tIDENTIFIER '(' ')' ';' section  {printf("Entering section: method next\n");}
+section: access tSTRING {printf("Entering section: field\n");}
+    |   access tSTRING '(' args ')'  {printf("Entering section: method\n");}
+    |   access tSTRING ';' section  {printf("Entering section: field next\n");}
+    |   access tSTRING '(' args ')' ';' section  {printf("Entering section: method next\n");}
+    |   access tSTRING '(' ')' ';' section  {printf("Entering section: method next\n");}
+    |   access tSTRING '(' ')'  {printf("Entering section: method\n");}    
     ;
 
 access: '+' {printf("Entering access\n");}
     |   '-' {printf("Entering access\n");}
     |   '#' {printf("Entering access\n");}
     |       {printf("Entering access\n");}
+    ;
+
+args: tSTRING   {printf("Entering args\n");}
+    |   tSTRING ',' args    {printf("Entering args: next\n");}
     ;
 
 stringSequence: tSTRING {printf("Entering string sequence\n");}
