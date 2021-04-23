@@ -9,4 +9,5 @@ add_executable(${PROJECT_NAME}
     lex.yy.c 
     parser.tab.c 
     parser.tab.h 
-    tree.h)
+    tree.h
+    tree.c)

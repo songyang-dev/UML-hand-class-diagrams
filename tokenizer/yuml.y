@@ -5,7 +5,7 @@
 #include "tree.h"
 
 extern int yylineno;
-//extern EXP *root;
+extern Line* root;
 
 int yylex();
 void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno, s); exit(1); }
@@ -22,7 +22,17 @@ void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno,
 %union {
     int int_val;
 	char *string_val;
-	EXP *exp;
+    Line* line;
+    Box* box;
+    Connection* connection;
+    Description* description;
+    DashType dashType;
+    Annotation* annotation;
+    End end;
+    Multiplicity* multiplicity;
+    Access access;
+    Section* section;
+    Args* args;
 }
 
 %token <int_val> tINTVAL
@@ -31,95 +41,113 @@ void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno,
 
 %left '-' tDOTLINE
 
+%type <line> program lines line
+%type <box> box umlClass
+%type <connection> connection
+%type <description> umlClassDescription
+%type <string_val> boxName
+%type <dashType> dashType
+%type <annotation> annotation dashAnnotationLeft dashAnnotationRight
+%type <end> end
+%type <multiplicity> multiplicity
+%type <string_val> stringSequence
+%type <access> access
+%type <section> section
+%type <args> args
+
 %start program
 
-%% 
-program: line           {printf("Entering program: line\n");}
-    |   line program    {printf("Entering program: line program\n");}
+%%
+
+program: lines      {root = $1;}
     ;
 
-line: box                   {printf("Entering line: box\n");}
-    |   box connection line {printf("Entering line: box connection line\n");}
+lines: line           {$$ = $1;}
+    |   line lines    {$$ = linkLines($1, $2);}
+    ;
+    
+line: box                   {$$ = makeLine_box($1);}
+    |   box connection line {$$ = connectBoxOnLine(makeLine_box($1), $2, $3);}
     ;
 
-box: '[' umlClass ']'   {printf("Entering box: umlClass\n");}
+box: '[' umlClass ']'   {$$ = $2;}
     ;
 
-umlClass: boxName       {printf("Entering uml class: boxName\n");}
-    |   boxName '|' umlClassDescription {printf("Entering uml class: boxName | umlClassDescription\n");}
+umlClass: boxName       {$$ = makeBox($1);}
+    |   boxName '|' umlClassDescription {$$ = makeBox_description($1, $3);}
     ;
 
-connection: dashAnnotationLeft dashType dashAnnotationRight    {printf("Entering connection: dashType and annotations\n");}
+connection: dashAnnotationLeft dashType dashAnnotationRight    {$$ = makeConnection($1, $2, $3);}
     ;
 
-boxName: tSTRING    {printf("Entering box name\n");}
-    |   tINTERFACEOPEN tSTRING tINTERFACECLOSE ';' tSTRING  {printf("Entering box name\n");}
-    |   tINTERFACEOPEN tSTRING tINTERFACECLOSE  {printf("Entering box name\n");}
+boxName: tSTRING    {$$ = $1;}
+    |   tINTERFACEOPEN tSTRING tINTERFACECLOSE ';' tSTRING  {$$ = combineBoxName($2, $5);}
+    |   tINTERFACEOPEN tSTRING tINTERFACECLOSE  {$$ = combineBoxName_interfaceOnly($2);}
     ;
 
-dashType: '-'   {printf("Entering dash type\n");}
-    |   '-' '-' {printf("Entering dash type\n");}
-    |   tDOTLINE    {printf("Entering dash type\n");}
-    |   '^' '-'    {printf("Entering dash type\n");}
-    |   '^'    {printf("Entering dash type\n");}
-    |   '^' tDOTLINE    {printf("Entering dash type\n");}
+dashType: '-'   {$$ = Simple;}
+    |   '-' '-' {$$ = Double;}
+    |   tDOTLINE    {$$ = DotLine;}
+    |   '^' '-'    {$$ = Inheritance;}
+    |   '^'    {$$ = Inheritance;}
+    |   '^' tDOTLINE    {$$ = InheritanceDotted;}
     ;
 
-dashAnnotationLeft: annotation  {printf("Entering dash annotation left\n");}
-    |   end annotation {printf("Entering dash annotation left: end annotation\n");}
-    |   end {printf("Entering dash annotation left: end\n");}
-    |
+dashAnnotationLeft: annotation  {$$ = $1;}
+    |   end annotation {$$ = linkAnnotation_leftEnd($2, $1);}
+    |   end {$$ = makeAnnotation_endOnly($1);}
+    |   {$$ = NULL;}
     ;
 
-dashAnnotationRight: annotation  {printf("Entering dash annotation right\n");}
-    |   annotation end    {printf("Entering dash annotation right: annotation end\n");}
-    |   end {printf("Entering dash annotation right: end\n");}
-    |
+dashAnnotationRight: annotation  {$$ = $1;}
+    |   annotation end    {$$ = linkAnnotation_rightEnd($1, $2);}
+    |   end {$$ = makeAnnotation_endOnly($1);}
+    |   {$$ = NULL;}
     ;
 
-annotation: stringSequence  {printf("Entering annotation: string sequence\n");}
-    |   multiplicity    {printf("Entering annotation: multiplicity\n");}
-    |   stringSequence multiplicity {printf("Entering annotation: string sequence and multiplicity\n");}
+annotation: stringSequence  {$$ = makeAnnotation_string($1);}
+    |   multiplicity    {$$ = makeAnnotation_mult($1);}
+    |   stringSequence multiplicity {$$ = makeAnnotation_both($1, $2);}
     ;
 
-multiplicity:   tINTVAL '.' '.' '*'     {printf("Entering multiplicity\n");}
-    |   tINTVAL '.' '.' tINTVAL {printf("Entering multiplicity\n");}
-    |   tINTVAL                 {printf("Entering multiplicity\n");}
-    |   '*'                     {printf("Entering multiplicity\n");}
+multiplicity:   tINTVAL '.' '.' '*'     {$$ = makeMultiplicity(LowerBounded, $1, -1);}
+    |   tINTVAL '.' '.' tINTVAL {$$ = makeMultiplicity(Bounded, $1, $4);}
+    |   tINTVAL                 {$$ = makeMultiplicity(Fixed, $1, -1);}
+    |   '*'                     {$$ = makeMultiplicity(Infinite, -1, -1);}
     ;
 
-end: tAGGREGATION   {printf("Entering end\n");}
-    |   '+'         {printf("Entering end\n");}
-    |   tCOMPOSITION    {printf("Entering end\n");}
+end: tAGGREGATION   {$$ = Aggregation;}
+    |   '+'         {$$ = Aggregation;}
+    |   tCOMPOSITION    {$$ = Composition;}
     // |   '^'    {printf("Entering end\n");}
-    |   tLEFTARROW  {printf("Entering end\n");}
-    |   tRIGHTARROW {printf("Entering end\n");}
+    |   tLEFTARROW  {$$ = LeftArrow;}
+    |   tRIGHTARROW {$$ = RightArrow;}
     ;
 
-umlClassDescription: section {printf("Entering uml class description\n");}
-    |   section '|' umlClassDescription {printf("Entering uml class description: tSTRING | next\n");}
+umlClassDescription: section {$$ = makeDescription($1);}
+    |   section '|' umlClassDescription {$$ = linkDescription(makeDescription($1), $3);}
     ;
 
-section: access tSTRING {printf("Entering section: field\n");}
-    |   access tSTRING '(' args ')'  {printf("Entering section: method\n");}
-    |   access tSTRING ';' section  {printf("Entering section: field next\n");}
-    |   access tSTRING '(' args ')' ';' section  {printf("Entering section: method next\n");}
-    |   access tSTRING '(' ')' ';' section  {printf("Entering section: method next\n");}
-    |   access tSTRING '(' ')'  {printf("Entering section: method\n");}    
+section: access tSTRING {$$ = makeSection(Field, $1, $2, NULL);}
+    |   access tSTRING '(' args ')'  {$$ = makeSection(Method, $1, $2, $4);}
+    |   access tSTRING ';' section  {$$ = linkSection(makeSection(Field, $1, $2, NULL), $4);}
+    |   access tSTRING '(' args ')' ';' section  {$$ = linkSection(makeSection(Method, $1, $2, $4), $7);}
+    |   access tSTRING '(' ')' ';' section  {$$ = linkSection(makeSection(Method, $1, $2, NULL), $6);}
+    |   access tSTRING '(' ')'  {$$ = makeSection(Method, $1, $2, NULL);}
     ;
 
-access: '+' {printf("Entering access\n");}
-    |   '-' {printf("Entering access\n");}
-    |   '#' {printf("Entering access\n");}
-    |       {printf("Entering access\n");}
+access: '+' {$$ = Public;}
+    |   '-' {$$ = Private;}
+    |   '#' {$$ = Protected;}
+    |       {$$ = None;}
     ;
 
-args: tSTRING   {printf("Entering args\n");}
-    |   tSTRING ',' args    {printf("Entering args: next\n");}
+args: tSTRING   {$$ = makeArgs($1);}
+    |   tSTRING ',' args    {$$ = linkArgs(makeArgs($1), $3);}
     ;
 
-stringSequence: tSTRING {printf("Entering string sequence\n");}
-    |   tSTRING stringSequence  {printf("Entering string sequence: next\n");}
+stringSequence: tSTRING {$$ = $1;}
+    |   tSTRING stringSequence  {$$ = combineStringSequence($1, $2);}
     ;
 
 %%

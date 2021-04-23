@@ -70,7 +70,7 @@
 #include "tree.h"
 
 extern int yylineno;
-//extern EXP *root;
+extern Line* root;
 
 int yylex();
 void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno, s); exit(1); }
@@ -147,9 +147,19 @@ union YYSTYPE
 
     int int_val;
 	char *string_val;
-	EXP *exp;
+    Line* line;
+    Box* box;
+    Connection* connection;
+    Description* description;
+    DashType dashType;
+    Annotation* annotation;
+    End end;
+    Multiplicity* multiplicity;
+    Access access;
+    Section* section;
+    Args* args;
 
-#line 153 "parser.tab.h" /* yacc.c:355  */
+#line 163 "parser.tab.h" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -180,7 +190,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 184 "parser.tab.h" /* yacc.c:358  */
+#line 194 "parser.tab.h" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -422,18 +432,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  9
+#define YYFINAL  10
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   75
+#define YYLAST   81
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  25
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  18
+#define YYNNTS  19
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  54
+#define YYNRULES  55
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  72
+#define YYNSTATES  73
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -480,12 +490,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    37,    37,    38,    41,    42,    45,    48,    49,    52,
-      55,    56,    57,    60,    61,    62,    63,    64,    65,    68,
-      69,    70,    71,    74,    75,    76,    77,    80,    81,    82,
-      85,    86,    87,    88,    91,    92,    93,    95,    96,    99,
-     100,   103,   104,   105,   106,   107,   108,   111,   112,   113,
-     114,   117,   118,   121,   122
+       0,    62,    62,    65,    66,    69,    70,    73,    76,    77,
+      80,    83,    84,    85,    88,    89,    90,    91,    92,    93,
+      96,    97,    98,    99,   102,   103,   104,   105,   108,   109,
+     110,   113,   114,   115,   116,   119,   120,   121,   123,   124,
+     127,   128,   131,   132,   133,   134,   135,   136,   139,   140,
+     141,   142,   145,   146,   149,   150
 };
 #endif
 
@@ -498,7 +508,7 @@ static const char *const yytname[] =
   "tINTERFACECLOSE", "tAGGREGATION", "tCOMPOSITION", "tLEFTARROW",
   "tRIGHTARROW", "tDOTLINE", "'-'", "'['", "']'", "'|'", "';'", "'^'",
   "'.'", "'*'", "'+'", "'('", "')'", "'#'", "','", "$accept", "program",
-  "line", "box", "umlClass", "connection", "boxName", "dashType",
+  "lines", "line", "box", "umlClass", "connection", "boxName", "dashType",
   "dashAnnotationLeft", "dashAnnotationRight", "annotation",
   "multiplicity", "end", "umlClassDescription", "section", "access",
   "args", "stringSequence", YY_NULLPTR
@@ -516,12 +526,12 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -22
+#define YYPACT_NINF -23
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-22)))
+  (!!((Yystate) == (-23)))
 
-#define YYTABLE_NINF -5
+#define YYTABLE_NINF -6
 
 #define yytable_value_is_error(Yytable_value) \
   0
@@ -530,14 +540,14 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-     -11,    46,    29,   -11,     0,   -22,    35,    28,    37,   -22,
-     -22,    38,    53,   -22,   -22,   -22,   -22,   -22,   -22,   -11,
-      36,   -22,   -22,    18,    11,    52,   -22,    23,    41,   -22,
-     -22,   -22,    48,    43,     8,   -22,   -22,    45,   -22,   -22,
-     -22,   -22,    47,    59,    21,   -22,   -22,   -22,   -22,    24,
-     -22,    60,    23,   -15,   -22,   -22,   -22,   -22,   -22,    23,
-       1,   -22,    42,    49,    50,    63,    23,    54,   -22,   -22,
-      23,   -22
+     -11,    48,    25,   -23,   -11,     0,   -23,    35,    15,    27,
+     -23,   -23,    30,    53,   -23,   -23,   -23,   -23,   -23,   -23,
+     -11,    39,   -23,   -23,    18,    11,    52,   -23,    23,    41,
+     -23,   -23,   -23,    49,    43,     8,   -23,   -23,    44,   -23,
+     -23,   -23,   -23,    47,    59,    21,   -23,   -23,   -23,   -23,
+      24,   -23,    60,    23,   -15,   -23,   -23,   -23,   -23,   -23,
+      23,     1,   -23,    42,    51,    46,    61,    23,    54,   -23,
+     -23,    23,   -23
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -545,28 +555,28 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,     0,     2,    22,    10,     0,     0,     7,     1,
-       3,    32,    53,    34,    36,    37,    38,    33,    35,     0,
-       0,    19,    28,    21,    27,     0,     6,    50,     0,    54,
-       5,    15,    13,    17,    26,    20,    29,    12,    48,    47,
-      49,     8,    39,     0,     0,    14,    18,    16,     9,    23,
-      25,     0,    50,    41,    31,    30,    24,    11,    40,    50,
-       0,    43,    51,    46,     0,     0,    50,    42,    52,    45,
-      50,    44
+       0,     0,     0,     2,     3,    23,    11,     0,     0,     8,
+       1,     4,    33,    54,    35,    37,    38,    39,    34,    36,
+       0,     0,    20,    29,    22,    28,     0,     7,    51,     0,
+      55,     6,    16,    14,    18,    27,    21,    30,    13,    49,
+      48,    50,     9,    40,     0,     0,    15,    19,    17,    10,
+      24,    26,     0,    51,    42,    32,    31,    25,    12,    41,
+      51,     0,    44,    52,    47,     0,     0,    51,    43,    53,
+      46,    51,    45
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -22,    65,    55,   -22,   -22,   -22,   -22,   -22,   -22,   -22,
-       2,    51,    -8,    17,   -21,   -22,     6,    61
+     -23,   -23,    65,    55,   -23,   -23,   -23,   -23,   -23,   -23,
+     -23,    12,    56,    -9,    19,   -22,   -23,     5,    63
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     3,     4,     7,    19,     8,    34,    20,    48,
-      21,    22,    23,    41,    42,    43,    64,    24
+      -1,     2,     3,     4,     5,     8,    20,     9,    35,    21,
+      49,    22,    23,    24,    42,    43,    44,    65,    25
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -574,62 +584,64 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      -4,    59,     1,    11,    12,    62,    60,    13,    14,    15,
-      16,    11,    12,    -4,    11,    13,    14,    15,    16,    17,
-      18,    11,    12,    63,    54,    35,    50,    17,    18,     9,
-      17,    13,    14,    15,    16,    38,    49,    17,    61,    25,
-      55,    56,    26,    39,    18,    69,    40,    31,    32,    71,
-       5,     6,    27,    33,    46,    47,    28,    12,    37,    44,
-      45,    51,    52,    53,    57,    66,    65,    62,    10,    58,
-      70,    68,    67,    29,    30,    36
+      -5,    60,     1,    12,    13,    63,    61,    14,    15,    16,
+      17,    12,    13,    -5,    12,    14,    15,    16,    17,    18,
+      19,    12,    13,    64,    55,    10,    51,    18,    19,    27,
+      18,    14,    15,    16,    17,    39,    36,    18,    62,    26,
+      56,    57,    28,    40,    19,    70,    41,    50,    29,    72,
+      32,    33,     6,     7,    47,    48,    34,    13,    38,    45,
+      52,    46,    53,    54,    58,    63,    66,    67,    68,    11,
+      71,    69,    59,     0,     0,    31,    30,     0,     0,     0,
+       0,    37
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
        0,    16,    13,     3,     4,     4,    21,     7,     8,     9,
       10,     3,     4,    13,     3,     7,     8,     9,    10,    19,
-      20,     3,     4,    22,     3,    23,    34,    19,    20,     0,
-      19,     7,     8,     9,    10,    12,    34,    19,    59,     4,
-      19,    49,    14,    20,    20,    66,    23,    11,    12,    70,
-       4,     5,    15,    17,    11,    12,    18,     4,     6,    18,
-      12,    16,    15,     4,     4,    16,    24,     4,     3,    52,
-      16,    65,    22,    12,    19,    24
+      20,     3,     4,    22,     3,     0,    35,    19,    20,    14,
+      19,     7,     8,     9,    10,    12,    24,    19,    60,     4,
+      19,    50,    15,    20,    20,    67,    23,    35,    18,    71,
+      11,    12,     4,     5,    11,    12,    17,     4,     6,    18,
+      16,    12,    15,     4,     4,     4,    24,    16,    22,     4,
+      16,    66,    53,    -1,    -1,    20,    13,    -1,    -1,    -1,
+      -1,    25
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    13,    26,    27,    28,     4,     5,    29,    31,     0,
-      26,     3,     4,     7,     8,     9,    10,    19,    20,    30,
-      33,    35,    36,    37,    42,     4,    14,    15,    18,    42,
-      27,    11,    12,    17,    32,    35,    36,     6,    12,    20,
-      23,    38,    39,    40,    18,    12,    11,    12,    34,    35,
-      37,    16,    15,     4,     3,    19,    37,     4,    38,    16,
-      21,    39,     4,    22,    41,    24,    16,    22,    41,    39,
-      16,    39
+       0,    13,    26,    27,    28,    29,     4,     5,    30,    32,
+       0,    27,     3,     4,     7,     8,     9,    10,    19,    20,
+      31,    34,    36,    37,    38,    43,     4,    14,    15,    18,
+      43,    28,    11,    12,    17,    33,    36,    37,     6,    12,
+      20,    23,    39,    40,    41,    18,    12,    11,    12,    35,
+      36,    38,    16,    15,     4,     3,    19,    38,     4,    39,
+      16,    21,    40,     4,    22,    42,    24,    16,    22,    42,
+      40,    16,    40
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    25,    26,    26,    27,    27,    28,    29,    29,    30,
-      31,    31,    31,    32,    32,    32,    32,    32,    32,    33,
-      33,    33,    33,    34,    34,    34,    34,    35,    35,    35,
-      36,    36,    36,    36,    37,    37,    37,    37,    37,    38,
-      38,    39,    39,    39,    39,    39,    39,    40,    40,    40,
-      40,    41,    41,    42,    42
+       0,    25,    26,    27,    27,    28,    28,    29,    30,    30,
+      31,    32,    32,    32,    33,    33,    33,    33,    33,    33,
+      34,    34,    34,    34,    35,    35,    35,    35,    36,    36,
+      36,    37,    37,    37,    37,    38,    38,    38,    38,    38,
+      39,    39,    40,    40,    40,    40,    40,    40,    41,    41,
+      41,    41,    42,    42,    43,    43
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     2,     1,     3,     3,     1,     3,     3,
-       1,     5,     3,     1,     2,     1,     2,     1,     2,     1,
-       2,     1,     0,     1,     2,     1,     0,     1,     1,     2,
-       4,     4,     1,     1,     1,     1,     1,     1,     1,     1,
-       3,     2,     5,     4,     7,     6,     4,     1,     1,     1,
-       0,     1,     3,     1,     2
+       0,     2,     1,     1,     2,     1,     3,     3,     1,     3,
+       3,     1,     5,     3,     1,     2,     1,     2,     1,     2,
+       1,     2,     1,     0,     1,     2,     1,     0,     1,     1,
+       2,     4,     4,     1,     1,     1,     1,     1,     1,     1,
+       1,     3,     2,     5,     4,     7,     6,     4,     1,     1,
+       1,     0,     1,     3,     1,     2
 };
 
 
@@ -1399,313 +1411,331 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 37 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering program: line\n");}
-#line 1405 "parser.tab.h" /* yacc.c:1646  */
-    break;
-
-  case 3:
-#line 38 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering program: line program\n");}
-#line 1411 "parser.tab.h" /* yacc.c:1646  */
-    break;
-
-  case 4:
-#line 41 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering line: box\n");}
+#line 62 "yuml.y" /* yacc.c:1646  */
+    {root = (yyvsp[0].line);}
 #line 1417 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 5:
-#line 42 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering line: box connection line\n");}
+  case 3:
+#line 65 "yuml.y" /* yacc.c:1646  */
+    {(yyval.line) = (yyvsp[0].line);}
 #line 1423 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 6:
-#line 45 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering box: umlClass\n");}
+  case 4:
+#line 66 "yuml.y" /* yacc.c:1646  */
+    {(yyval.line) = linkLines((yyvsp[-1].line), (yyvsp[0].line));}
 #line 1429 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 7:
-#line 48 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering uml class: boxName\n");}
+  case 5:
+#line 69 "yuml.y" /* yacc.c:1646  */
+    {(yyval.line) = makeLine_box((yyvsp[0].box));}
 #line 1435 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 8:
-#line 49 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering uml class: boxName | umlClassDescription\n");}
+  case 6:
+#line 70 "yuml.y" /* yacc.c:1646  */
+    {(yyval.line) = connectBoxOnLine(makeLine_box((yyvsp[-2].box)), (yyvsp[-1].connection), (yyvsp[0].line));}
 #line 1441 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 9:
-#line 52 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering connection: dashType and annotations\n");}
+  case 7:
+#line 73 "yuml.y" /* yacc.c:1646  */
+    {(yyval.box) = (yyvsp[-1].box);}
 #line 1447 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 10:
-#line 55 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering box name\n");}
+  case 8:
+#line 76 "yuml.y" /* yacc.c:1646  */
+    {(yyval.box) = makeBox((yyvsp[0].string_val));}
 #line 1453 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 11:
-#line 56 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering box name\n");}
+  case 9:
+#line 77 "yuml.y" /* yacc.c:1646  */
+    {(yyval.box) = makeBox_description((yyvsp[-2].string_val), (yyvsp[0].description));}
 #line 1459 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 12:
-#line 57 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering box name\n");}
+  case 10:
+#line 80 "yuml.y" /* yacc.c:1646  */
+    {(yyval.connection) = makeConnection((yyvsp[-2].annotation), (yyvsp[-1].dashType), (yyvsp[0].annotation));}
 #line 1465 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 13:
-#line 60 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash type\n");}
+  case 11:
+#line 83 "yuml.y" /* yacc.c:1646  */
+    {(yyval.string_val) = (yyvsp[0].string_val);}
 #line 1471 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 14:
-#line 61 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash type\n");}
+  case 12:
+#line 84 "yuml.y" /* yacc.c:1646  */
+    {(yyval.string_val) = combineBoxName((yyvsp[-3].string_val), (yyvsp[0].string_val));}
 #line 1477 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 15:
-#line 62 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash type\n");}
+  case 13:
+#line 85 "yuml.y" /* yacc.c:1646  */
+    {(yyval.string_val) = combineBoxName_interfaceOnly((yyvsp[-1].string_val));}
 #line 1483 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 16:
-#line 63 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash type\n");}
+  case 14:
+#line 88 "yuml.y" /* yacc.c:1646  */
+    {(yyval.dashType) = Simple;}
 #line 1489 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 17:
-#line 64 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash type\n");}
+  case 15:
+#line 89 "yuml.y" /* yacc.c:1646  */
+    {(yyval.dashType) = Double;}
 #line 1495 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 18:
-#line 65 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash type\n");}
+  case 16:
+#line 90 "yuml.y" /* yacc.c:1646  */
+    {(yyval.dashType) = DotLine;}
 #line 1501 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 19:
-#line 68 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash annotation left\n");}
+  case 17:
+#line 91 "yuml.y" /* yacc.c:1646  */
+    {(yyval.dashType) = Inheritance;}
 #line 1507 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 20:
-#line 69 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash annotation left: end annotation\n");}
+  case 18:
+#line 92 "yuml.y" /* yacc.c:1646  */
+    {(yyval.dashType) = Inheritance;}
 #line 1513 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 21:
-#line 70 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash annotation left: end\n");}
+  case 19:
+#line 93 "yuml.y" /* yacc.c:1646  */
+    {(yyval.dashType) = InheritanceDotted;}
 #line 1519 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 23:
-#line 74 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash annotation right\n");}
+  case 20:
+#line 96 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = (yyvsp[0].annotation);}
 #line 1525 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 24:
-#line 75 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash annotation right: annotation end\n");}
+  case 21:
+#line 97 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = linkAnnotation_leftEnd((yyvsp[0].annotation), (yyvsp[-1].end));}
 #line 1531 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 25:
-#line 76 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering dash annotation right: end\n");}
+  case 22:
+#line 98 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = makeAnnotation_endOnly((yyvsp[0].end));}
 #line 1537 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 27:
-#line 80 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering annotation: string sequence\n");}
+  case 23:
+#line 99 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = NULL;}
 #line 1543 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 28:
-#line 81 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering annotation: multiplicity\n");}
+  case 24:
+#line 102 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = (yyvsp[0].annotation);}
 #line 1549 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 29:
-#line 82 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering annotation: string sequence and multiplicity\n");}
+  case 25:
+#line 103 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = linkAnnotation_rightEnd((yyvsp[-1].annotation), (yyvsp[0].end));}
 #line 1555 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 30:
-#line 85 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering multiplicity\n");}
+  case 26:
+#line 104 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = makeAnnotation_endOnly((yyvsp[0].end));}
 #line 1561 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 31:
-#line 86 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering multiplicity\n");}
+  case 27:
+#line 105 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = NULL;}
 #line 1567 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 32:
-#line 87 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering multiplicity\n");}
+  case 28:
+#line 108 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = makeAnnotation_string((yyvsp[0].string_val));}
 #line 1573 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 33:
-#line 88 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering multiplicity\n");}
+  case 29:
+#line 109 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = makeAnnotation_mult((yyvsp[0].multiplicity));}
 #line 1579 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 34:
-#line 91 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering end\n");}
+  case 30:
+#line 110 "yuml.y" /* yacc.c:1646  */
+    {(yyval.annotation) = makeAnnotation_both((yyvsp[-1].string_val), (yyvsp[0].multiplicity));}
 #line 1585 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 35:
-#line 92 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering end\n");}
+  case 31:
+#line 113 "yuml.y" /* yacc.c:1646  */
+    {(yyval.multiplicity) = makeMultiplicity(LowerBounded, (yyvsp[-3].int_val), -1);}
 #line 1591 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 36:
-#line 93 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering end\n");}
+  case 32:
+#line 114 "yuml.y" /* yacc.c:1646  */
+    {(yyval.multiplicity) = makeMultiplicity(Bounded, (yyvsp[-3].int_val), (yyvsp[0].int_val));}
 #line 1597 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 37:
-#line 95 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering end\n");}
+  case 33:
+#line 115 "yuml.y" /* yacc.c:1646  */
+    {(yyval.multiplicity) = makeMultiplicity(Fixed, (yyvsp[0].int_val), -1);}
 #line 1603 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 38:
-#line 96 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering end\n");}
+  case 34:
+#line 116 "yuml.y" /* yacc.c:1646  */
+    {(yyval.multiplicity) = makeMultiplicity(Infinite, -1, -1);}
 #line 1609 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 39:
-#line 99 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering uml class description\n");}
+  case 35:
+#line 119 "yuml.y" /* yacc.c:1646  */
+    {(yyval.end) = Aggregation;}
 #line 1615 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 40:
-#line 100 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering uml class description: tSTRING | next\n");}
+  case 36:
+#line 120 "yuml.y" /* yacc.c:1646  */
+    {(yyval.end) = Aggregation;}
 #line 1621 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 41:
-#line 103 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering section: field\n");}
+  case 37:
+#line 121 "yuml.y" /* yacc.c:1646  */
+    {(yyval.end) = Composition;}
 #line 1627 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 42:
-#line 104 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering section: method\n");}
+  case 38:
+#line 123 "yuml.y" /* yacc.c:1646  */
+    {(yyval.end) = LeftArrow;}
 #line 1633 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 43:
-#line 105 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering section: field next\n");}
+  case 39:
+#line 124 "yuml.y" /* yacc.c:1646  */
+    {(yyval.end) = RightArrow;}
 #line 1639 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 44:
-#line 106 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering section: method next\n");}
+  case 40:
+#line 127 "yuml.y" /* yacc.c:1646  */
+    {(yyval.description) = makeDescription((yyvsp[0].section));}
 #line 1645 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 45:
-#line 107 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering section: method next\n");}
+  case 41:
+#line 128 "yuml.y" /* yacc.c:1646  */
+    {(yyval.description) = linkDescription(makeDescription((yyvsp[-2].section)), (yyvsp[0].description));}
 #line 1651 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 46:
-#line 108 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering section: method\n");}
+  case 42:
+#line 131 "yuml.y" /* yacc.c:1646  */
+    {(yyval.section) = makeSection(Field, (yyvsp[-1].access), (yyvsp[0].string_val), NULL);}
 #line 1657 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 47:
-#line 111 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering access\n");}
+  case 43:
+#line 132 "yuml.y" /* yacc.c:1646  */
+    {(yyval.section) = makeSection(Method, (yyvsp[-4].access), (yyvsp[-3].string_val), (yyvsp[-1].args));}
 #line 1663 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 48:
-#line 112 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering access\n");}
+  case 44:
+#line 133 "yuml.y" /* yacc.c:1646  */
+    {(yyval.section) = linkSection(makeSection(Field, (yyvsp[-3].access), (yyvsp[-2].string_val), NULL), (yyvsp[0].section));}
 #line 1669 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 49:
-#line 113 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering access\n");}
+  case 45:
+#line 134 "yuml.y" /* yacc.c:1646  */
+    {(yyval.section) = linkSection(makeSection(Method, (yyvsp[-6].access), (yyvsp[-5].string_val), (yyvsp[-3].args)), (yyvsp[0].section));}
 #line 1675 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 50:
-#line 114 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering access\n");}
+  case 46:
+#line 135 "yuml.y" /* yacc.c:1646  */
+    {(yyval.section) = linkSection(makeSection(Method, (yyvsp[-5].access), (yyvsp[-4].string_val), NULL), (yyvsp[0].section));}
 #line 1681 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 51:
-#line 117 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering args\n");}
+  case 47:
+#line 136 "yuml.y" /* yacc.c:1646  */
+    {(yyval.section) = makeSection(Method, (yyvsp[-3].access), (yyvsp[-2].string_val), NULL);}
 #line 1687 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 52:
-#line 118 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering args: next\n");}
+  case 48:
+#line 139 "yuml.y" /* yacc.c:1646  */
+    {(yyval.access) = Public;}
 #line 1693 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 53:
-#line 121 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering string sequence\n");}
+  case 49:
+#line 140 "yuml.y" /* yacc.c:1646  */
+    {(yyval.access) = Private;}
 #line 1699 "parser.tab.h" /* yacc.c:1646  */
     break;
 
-  case 54:
-#line 122 "yuml.y" /* yacc.c:1646  */
-    {printf("Entering string sequence: next\n");}
+  case 50:
+#line 141 "yuml.y" /* yacc.c:1646  */
+    {(yyval.access) = Protected;}
 #line 1705 "parser.tab.h" /* yacc.c:1646  */
     break;
 
+  case 51:
+#line 142 "yuml.y" /* yacc.c:1646  */
+    {(yyval.access) = None;}
+#line 1711 "parser.tab.h" /* yacc.c:1646  */
+    break;
 
-#line 1709 "parser.tab.h" /* yacc.c:1646  */
+  case 52:
+#line 145 "yuml.y" /* yacc.c:1646  */
+    {(yyval.args) = makeArgs((yyvsp[0].string_val));}
+#line 1717 "parser.tab.h" /* yacc.c:1646  */
+    break;
+
+  case 53:
+#line 146 "yuml.y" /* yacc.c:1646  */
+    {(yyval.args) = linkArgs(makeArgs((yyvsp[-2].string_val)), (yyvsp[0].args));}
+#line 1723 "parser.tab.h" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 149 "yuml.y" /* yacc.c:1646  */
+    {(yyval.string_val) = (yyvsp[0].string_val);}
+#line 1729 "parser.tab.h" /* yacc.c:1646  */
+    break;
+
+  case 55:
+#line 150 "yuml.y" /* yacc.c:1646  */
+    {(yyval.string_val) = combineStringSequence((yyvsp[-1].string_val), (yyvsp[0].string_val));}
+#line 1735 "parser.tab.h" /* yacc.c:1646  */
+    break;
+
+
+#line 1739 "parser.tab.h" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1940,4 +1970,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 125 "yuml.y" /* yacc.c:1906  */
+#line 153 "yuml.y" /* yacc.c:1906  */

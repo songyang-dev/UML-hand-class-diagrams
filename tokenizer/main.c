@@ -3,7 +3,7 @@
 //#include "pretty.h"
 
 void yyparse();
-EXP *root;
+Line* root;
 
 int main(int argc, char * argv[])
 {

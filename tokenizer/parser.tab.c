@@ -82,9 +82,19 @@ union YYSTYPE
 
     int int_val;
 	char *string_val;
-	EXP *exp;
+    Line* line;
+    Box* box;
+    Connection* connection;
+    Description* description;
+    DashType dashType;
+    Annotation* annotation;
+    End end;
+    Multiplicity* multiplicity;
+    Access access;
+    Section* section;
+    Args* args;
 
-#line 88 "parser.tab.c" /* yacc.c:1909  */
+#line 98 "parser.tab.c" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
