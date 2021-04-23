@@ -70,7 +70,7 @@
 #include "tree.h"
 
 extern int yylineno;
-extern Line* root;
+extern YUML* root;
 
 int yylex();
 void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno, s); exit(1); }
@@ -147,6 +147,7 @@ union YYSTYPE
 
     int int_val;
 	char *string_val;
+    YUML* yuml;
     Line* line;
     Box* box;
     Connection* connection;
@@ -159,7 +160,7 @@ union YYSTYPE
     Section* section;
     Args* args;
 
-#line 163 "parser.tab.h" /* yacc.c:355  */
+#line 164 "parser.tab.h" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -190,7 +191,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 194 "parser.tab.h" /* yacc.c:358  */
+#line 195 "parser.tab.h" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -490,12 +491,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    62,    62,    65,    66,    69,    70,    73,    76,    77,
-      80,    83,    84,    85,    88,    89,    90,    91,    92,    93,
-      96,    97,    98,    99,   102,   103,   104,   105,   108,   109,
-     110,   113,   114,   115,   116,   119,   120,   121,   123,   124,
-     127,   128,   131,   132,   133,   134,   135,   136,   139,   140,
-     141,   142,   145,   146,   149,   150
+       0,    64,    64,    67,    68,    71,    72,    75,    78,    79,
+      82,    85,    86,    87,    90,    91,    92,    93,    94,    95,
+      98,    99,   100,   101,   104,   105,   106,   107,   110,   111,
+     112,   115,   116,   117,   118,   121,   122,   123,   125,   126,
+     129,   130,   133,   134,   135,   136,   137,   138,   141,   142,
+     143,   144,   147,   148,   151,   152
 };
 #endif
 
@@ -508,8 +509,8 @@ static const char *const yytname[] =
   "tINTERFACECLOSE", "tAGGREGATION", "tCOMPOSITION", "tLEFTARROW",
   "tRIGHTARROW", "tDOTLINE", "'-'", "'['", "']'", "'|'", "';'", "'^'",
   "'.'", "'*'", "'+'", "'('", "')'", "'#'", "','", "$accept", "program",
-  "lines", "line", "box", "umlClass", "connection", "boxName", "dashType",
-  "dashAnnotationLeft", "dashAnnotationRight", "annotation",
+  "program_line", "line", "box", "umlClass", "connection", "boxName",
+  "dashType", "dashAnnotationLeft", "dashAnnotationRight", "annotation",
   "multiplicity", "end", "umlClassDescription", "section", "access",
   "args", "stringSequence", YY_NULLPTR
 };
@@ -1411,331 +1412,331 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 62 "yuml.y" /* yacc.c:1646  */
-    {root = (yyvsp[0].line);}
-#line 1417 "parser.tab.h" /* yacc.c:1646  */
+#line 64 "yuml.y" /* yacc.c:1646  */
+    {root = (yyvsp[0].yuml);}
+#line 1418 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 65 "yuml.y" /* yacc.c:1646  */
-    {(yyval.line) = (yyvsp[0].line);}
-#line 1423 "parser.tab.h" /* yacc.c:1646  */
+#line 67 "yuml.y" /* yacc.c:1646  */
+    {(yyval.yuml) = makeYUML((yyvsp[0].line));}
+#line 1424 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 66 "yuml.y" /* yacc.c:1646  */
-    {(yyval.line) = linkLines((yyvsp[-1].line), (yyvsp[0].line));}
-#line 1429 "parser.tab.h" /* yacc.c:1646  */
+#line 68 "yuml.y" /* yacc.c:1646  */
+    {(yyval.yuml) = linkYUML(makeYUML((yyvsp[-1].line)), (yyvsp[0].yuml));}
+#line 1430 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 69 "yuml.y" /* yacc.c:1646  */
+#line 71 "yuml.y" /* yacc.c:1646  */
     {(yyval.line) = makeLine_box((yyvsp[0].box));}
-#line 1435 "parser.tab.h" /* yacc.c:1646  */
+#line 1436 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 70 "yuml.y" /* yacc.c:1646  */
+#line 72 "yuml.y" /* yacc.c:1646  */
     {(yyval.line) = connectBoxOnLine(makeLine_box((yyvsp[-2].box)), (yyvsp[-1].connection), (yyvsp[0].line));}
-#line 1441 "parser.tab.h" /* yacc.c:1646  */
+#line 1442 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 73 "yuml.y" /* yacc.c:1646  */
+#line 75 "yuml.y" /* yacc.c:1646  */
     {(yyval.box) = (yyvsp[-1].box);}
-#line 1447 "parser.tab.h" /* yacc.c:1646  */
+#line 1448 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 76 "yuml.y" /* yacc.c:1646  */
+#line 78 "yuml.y" /* yacc.c:1646  */
     {(yyval.box) = makeBox((yyvsp[0].string_val));}
-#line 1453 "parser.tab.h" /* yacc.c:1646  */
+#line 1454 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 77 "yuml.y" /* yacc.c:1646  */
+#line 79 "yuml.y" /* yacc.c:1646  */
     {(yyval.box) = makeBox_description((yyvsp[-2].string_val), (yyvsp[0].description));}
-#line 1459 "parser.tab.h" /* yacc.c:1646  */
+#line 1460 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 80 "yuml.y" /* yacc.c:1646  */
+#line 82 "yuml.y" /* yacc.c:1646  */
     {(yyval.connection) = makeConnection((yyvsp[-2].annotation), (yyvsp[-1].dashType), (yyvsp[0].annotation));}
-#line 1465 "parser.tab.h" /* yacc.c:1646  */
+#line 1466 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 83 "yuml.y" /* yacc.c:1646  */
+#line 85 "yuml.y" /* yacc.c:1646  */
     {(yyval.string_val) = (yyvsp[0].string_val);}
-#line 1471 "parser.tab.h" /* yacc.c:1646  */
+#line 1472 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 84 "yuml.y" /* yacc.c:1646  */
+#line 86 "yuml.y" /* yacc.c:1646  */
     {(yyval.string_val) = combineBoxName((yyvsp[-3].string_val), (yyvsp[0].string_val));}
-#line 1477 "parser.tab.h" /* yacc.c:1646  */
+#line 1478 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 85 "yuml.y" /* yacc.c:1646  */
+#line 87 "yuml.y" /* yacc.c:1646  */
     {(yyval.string_val) = combineBoxName_interfaceOnly((yyvsp[-1].string_val));}
-#line 1483 "parser.tab.h" /* yacc.c:1646  */
+#line 1484 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 88 "yuml.y" /* yacc.c:1646  */
+#line 90 "yuml.y" /* yacc.c:1646  */
     {(yyval.dashType) = Simple;}
-#line 1489 "parser.tab.h" /* yacc.c:1646  */
+#line 1490 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 89 "yuml.y" /* yacc.c:1646  */
+#line 91 "yuml.y" /* yacc.c:1646  */
     {(yyval.dashType) = Double;}
-#line 1495 "parser.tab.h" /* yacc.c:1646  */
+#line 1496 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 90 "yuml.y" /* yacc.c:1646  */
+#line 92 "yuml.y" /* yacc.c:1646  */
     {(yyval.dashType) = DotLine;}
-#line 1501 "parser.tab.h" /* yacc.c:1646  */
+#line 1502 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 91 "yuml.y" /* yacc.c:1646  */
+#line 93 "yuml.y" /* yacc.c:1646  */
     {(yyval.dashType) = Inheritance;}
-#line 1507 "parser.tab.h" /* yacc.c:1646  */
+#line 1508 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 92 "yuml.y" /* yacc.c:1646  */
+#line 94 "yuml.y" /* yacc.c:1646  */
     {(yyval.dashType) = Inheritance;}
-#line 1513 "parser.tab.h" /* yacc.c:1646  */
+#line 1514 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 93 "yuml.y" /* yacc.c:1646  */
+#line 95 "yuml.y" /* yacc.c:1646  */
     {(yyval.dashType) = InheritanceDotted;}
-#line 1519 "parser.tab.h" /* yacc.c:1646  */
+#line 1520 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 96 "yuml.y" /* yacc.c:1646  */
+#line 98 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = (yyvsp[0].annotation);}
-#line 1525 "parser.tab.h" /* yacc.c:1646  */
+#line 1526 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 97 "yuml.y" /* yacc.c:1646  */
+#line 99 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = linkAnnotation_leftEnd((yyvsp[0].annotation), (yyvsp[-1].end));}
-#line 1531 "parser.tab.h" /* yacc.c:1646  */
+#line 1532 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 98 "yuml.y" /* yacc.c:1646  */
+#line 100 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = makeAnnotation_endOnly((yyvsp[0].end));}
-#line 1537 "parser.tab.h" /* yacc.c:1646  */
+#line 1538 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 99 "yuml.y" /* yacc.c:1646  */
+#line 101 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = NULL;}
-#line 1543 "parser.tab.h" /* yacc.c:1646  */
+#line 1544 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 102 "yuml.y" /* yacc.c:1646  */
+#line 104 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = (yyvsp[0].annotation);}
-#line 1549 "parser.tab.h" /* yacc.c:1646  */
+#line 1550 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 103 "yuml.y" /* yacc.c:1646  */
+#line 105 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = linkAnnotation_rightEnd((yyvsp[-1].annotation), (yyvsp[0].end));}
-#line 1555 "parser.tab.h" /* yacc.c:1646  */
+#line 1556 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 104 "yuml.y" /* yacc.c:1646  */
+#line 106 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = makeAnnotation_endOnly((yyvsp[0].end));}
-#line 1561 "parser.tab.h" /* yacc.c:1646  */
+#line 1562 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 105 "yuml.y" /* yacc.c:1646  */
+#line 107 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = NULL;}
-#line 1567 "parser.tab.h" /* yacc.c:1646  */
+#line 1568 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 108 "yuml.y" /* yacc.c:1646  */
+#line 110 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = makeAnnotation_string((yyvsp[0].string_val));}
-#line 1573 "parser.tab.h" /* yacc.c:1646  */
+#line 1574 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 109 "yuml.y" /* yacc.c:1646  */
+#line 111 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = makeAnnotation_mult((yyvsp[0].multiplicity));}
-#line 1579 "parser.tab.h" /* yacc.c:1646  */
+#line 1580 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 110 "yuml.y" /* yacc.c:1646  */
+#line 112 "yuml.y" /* yacc.c:1646  */
     {(yyval.annotation) = makeAnnotation_both((yyvsp[-1].string_val), (yyvsp[0].multiplicity));}
-#line 1585 "parser.tab.h" /* yacc.c:1646  */
+#line 1586 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 113 "yuml.y" /* yacc.c:1646  */
+#line 115 "yuml.y" /* yacc.c:1646  */
     {(yyval.multiplicity) = makeMultiplicity(LowerBounded, (yyvsp[-3].int_val), -1);}
-#line 1591 "parser.tab.h" /* yacc.c:1646  */
+#line 1592 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 114 "yuml.y" /* yacc.c:1646  */
+#line 116 "yuml.y" /* yacc.c:1646  */
     {(yyval.multiplicity) = makeMultiplicity(Bounded, (yyvsp[-3].int_val), (yyvsp[0].int_val));}
-#line 1597 "parser.tab.h" /* yacc.c:1646  */
+#line 1598 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 115 "yuml.y" /* yacc.c:1646  */
+#line 117 "yuml.y" /* yacc.c:1646  */
     {(yyval.multiplicity) = makeMultiplicity(Fixed, (yyvsp[0].int_val), -1);}
-#line 1603 "parser.tab.h" /* yacc.c:1646  */
+#line 1604 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 116 "yuml.y" /* yacc.c:1646  */
+#line 118 "yuml.y" /* yacc.c:1646  */
     {(yyval.multiplicity) = makeMultiplicity(Infinite, -1, -1);}
-#line 1609 "parser.tab.h" /* yacc.c:1646  */
+#line 1610 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 119 "yuml.y" /* yacc.c:1646  */
+#line 121 "yuml.y" /* yacc.c:1646  */
     {(yyval.end) = Aggregation;}
-#line 1615 "parser.tab.h" /* yacc.c:1646  */
+#line 1616 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 120 "yuml.y" /* yacc.c:1646  */
+#line 122 "yuml.y" /* yacc.c:1646  */
     {(yyval.end) = Aggregation;}
-#line 1621 "parser.tab.h" /* yacc.c:1646  */
+#line 1622 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 121 "yuml.y" /* yacc.c:1646  */
+#line 123 "yuml.y" /* yacc.c:1646  */
     {(yyval.end) = Composition;}
-#line 1627 "parser.tab.h" /* yacc.c:1646  */
+#line 1628 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 123 "yuml.y" /* yacc.c:1646  */
+#line 125 "yuml.y" /* yacc.c:1646  */
     {(yyval.end) = LeftArrow;}
-#line 1633 "parser.tab.h" /* yacc.c:1646  */
+#line 1634 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 124 "yuml.y" /* yacc.c:1646  */
+#line 126 "yuml.y" /* yacc.c:1646  */
     {(yyval.end) = RightArrow;}
-#line 1639 "parser.tab.h" /* yacc.c:1646  */
+#line 1640 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 127 "yuml.y" /* yacc.c:1646  */
+#line 129 "yuml.y" /* yacc.c:1646  */
     {(yyval.description) = makeDescription((yyvsp[0].section));}
-#line 1645 "parser.tab.h" /* yacc.c:1646  */
+#line 1646 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 128 "yuml.y" /* yacc.c:1646  */
+#line 130 "yuml.y" /* yacc.c:1646  */
     {(yyval.description) = linkDescription(makeDescription((yyvsp[-2].section)), (yyvsp[0].description));}
-#line 1651 "parser.tab.h" /* yacc.c:1646  */
+#line 1652 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 131 "yuml.y" /* yacc.c:1646  */
+#line 133 "yuml.y" /* yacc.c:1646  */
     {(yyval.section) = makeSection(Field, (yyvsp[-1].access), (yyvsp[0].string_val), NULL);}
-#line 1657 "parser.tab.h" /* yacc.c:1646  */
+#line 1658 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 132 "yuml.y" /* yacc.c:1646  */
+#line 134 "yuml.y" /* yacc.c:1646  */
     {(yyval.section) = makeSection(Method, (yyvsp[-4].access), (yyvsp[-3].string_val), (yyvsp[-1].args));}
-#line 1663 "parser.tab.h" /* yacc.c:1646  */
+#line 1664 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 133 "yuml.y" /* yacc.c:1646  */
+#line 135 "yuml.y" /* yacc.c:1646  */
     {(yyval.section) = linkSection(makeSection(Field, (yyvsp[-3].access), (yyvsp[-2].string_val), NULL), (yyvsp[0].section));}
-#line 1669 "parser.tab.h" /* yacc.c:1646  */
+#line 1670 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 134 "yuml.y" /* yacc.c:1646  */
+#line 136 "yuml.y" /* yacc.c:1646  */
     {(yyval.section) = linkSection(makeSection(Method, (yyvsp[-6].access), (yyvsp[-5].string_val), (yyvsp[-3].args)), (yyvsp[0].section));}
-#line 1675 "parser.tab.h" /* yacc.c:1646  */
+#line 1676 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 135 "yuml.y" /* yacc.c:1646  */
+#line 137 "yuml.y" /* yacc.c:1646  */
     {(yyval.section) = linkSection(makeSection(Method, (yyvsp[-5].access), (yyvsp[-4].string_val), NULL), (yyvsp[0].section));}
-#line 1681 "parser.tab.h" /* yacc.c:1646  */
+#line 1682 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 136 "yuml.y" /* yacc.c:1646  */
+#line 138 "yuml.y" /* yacc.c:1646  */
     {(yyval.section) = makeSection(Method, (yyvsp[-3].access), (yyvsp[-2].string_val), NULL);}
-#line 1687 "parser.tab.h" /* yacc.c:1646  */
+#line 1688 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 139 "yuml.y" /* yacc.c:1646  */
+#line 141 "yuml.y" /* yacc.c:1646  */
     {(yyval.access) = Public;}
-#line 1693 "parser.tab.h" /* yacc.c:1646  */
+#line 1694 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 140 "yuml.y" /* yacc.c:1646  */
+#line 142 "yuml.y" /* yacc.c:1646  */
     {(yyval.access) = Private;}
-#line 1699 "parser.tab.h" /* yacc.c:1646  */
+#line 1700 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 141 "yuml.y" /* yacc.c:1646  */
+#line 143 "yuml.y" /* yacc.c:1646  */
     {(yyval.access) = Protected;}
-#line 1705 "parser.tab.h" /* yacc.c:1646  */
+#line 1706 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 142 "yuml.y" /* yacc.c:1646  */
+#line 144 "yuml.y" /* yacc.c:1646  */
     {(yyval.access) = None;}
-#line 1711 "parser.tab.h" /* yacc.c:1646  */
+#line 1712 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 145 "yuml.y" /* yacc.c:1646  */
+#line 147 "yuml.y" /* yacc.c:1646  */
     {(yyval.args) = makeArgs((yyvsp[0].string_val));}
-#line 1717 "parser.tab.h" /* yacc.c:1646  */
+#line 1718 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 146 "yuml.y" /* yacc.c:1646  */
+#line 148 "yuml.y" /* yacc.c:1646  */
     {(yyval.args) = linkArgs(makeArgs((yyvsp[-2].string_val)), (yyvsp[0].args));}
-#line 1723 "parser.tab.h" /* yacc.c:1646  */
+#line 1724 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 149 "yuml.y" /* yacc.c:1646  */
+#line 151 "yuml.y" /* yacc.c:1646  */
     {(yyval.string_val) = (yyvsp[0].string_val);}
-#line 1729 "parser.tab.h" /* yacc.c:1646  */
+#line 1730 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 150 "yuml.y" /* yacc.c:1646  */
+#line 152 "yuml.y" /* yacc.c:1646  */
     {(yyval.string_val) = combineStringSequence((yyvsp[-1].string_val), (yyvsp[0].string_val));}
-#line 1735 "parser.tab.h" /* yacc.c:1646  */
+#line 1736 "parser.tab.h" /* yacc.c:1646  */
     break;
 
 
-#line 1739 "parser.tab.h" /* yacc.c:1646  */
+#line 1740 "parser.tab.h" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1970,4 +1971,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 153 "yuml.y" /* yacc.c:1906  */
+#line 155 "yuml.y" /* yacc.c:1906  */

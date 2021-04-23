@@ -5,7 +5,7 @@
 #include "tree.h"
 
 extern int yylineno;
-extern Line* root;
+extern YUML* root;
 
 int yylex();
 void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno, s); exit(1); }
@@ -22,6 +22,7 @@ void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno,
 %union {
     int int_val;
 	char *string_val;
+    YUML* yuml;
     Line* line;
     Box* box;
     Connection* connection;
@@ -41,7 +42,8 @@ void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno,
 
 %left '-' tDOTLINE
 
-%type <line> program lines line
+%type <yuml> program program_line
+%type <line> line
 %type <box> box umlClass
 %type <connection> connection
 %type <description> umlClassDescription
@@ -59,11 +61,11 @@ void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno,
 
 %%
 
-program: lines      {root = $1;}
+program: program_line      {root = $1;}
     ;
 
-lines: line           {$$ = $1;}
-    |   line lines    {$$ = linkLines($1, $2);}
+program_line: line           {$$ = makeYUML($1);}
+    |   line program_line    {$$ = linkYUML(makeYUML($1), $2);}
     ;
     
 line: box                   {$$ = makeLine_box($1);}

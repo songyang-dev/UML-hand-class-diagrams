@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "tree.h"
-//#include "pretty.h"
+#include "pretty.h"
 
 void yyparse();
-Line* root;
+YUML* root;
 
 int main(int argc, char * argv[])
 {
@@ -11,7 +11,7 @@ int main(int argc, char * argv[])
 
 	yyparse();
 
-	//int result = evalEXP(root);
+    printYUML(root);
 
 	return 0;
 }

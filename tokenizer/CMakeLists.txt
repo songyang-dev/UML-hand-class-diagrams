@@ -10,4 +10,6 @@ add_executable(${PROJECT_NAME}
     parser.tab.c 
     parser.tab.h 
     tree.h
-    tree.c)
+    tree.c
+    pretty.h
+    pretty.c)

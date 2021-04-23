@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 
+typedef struct YUML YUML;
 typedef struct Line Line;
 typedef struct Box Box;
 typedef struct Connection Connection;
@@ -47,6 +48,11 @@ typedef enum {
     Field,
     Method
 } SectionKind;
+
+struct YUML {
+    Line* current;
+    YUML* next;
+};
 
 struct Line {
     int lineno;
@@ -98,8 +104,10 @@ struct Args {
     Args* next;
 };
 
+YUML* makeYUML(Line*);
+YUML* linkYUML(YUML*, YUML*);
+
 Line* makeLine_box(Box*);
-Line* linkLines(Line* current, Line* next);
 Line* connectBoxOnLine(Line* currentLineOfBox, Connection*, Line* nextLine);
 
 Box* makeBox(char* name);

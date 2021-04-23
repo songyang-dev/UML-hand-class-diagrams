@@ -6,6 +6,20 @@
 
 extern int yylineno;
 
+YUML* makeYUML(Line* l)
+{
+    YUML* y = (YUML*)malloc(sizeof(YUML));
+    y->current = l;
+    y->next = NULL;
+    return y;
+}
+
+YUML* linkYUML(YUML* current, YUML* next)
+{
+    current->next = next;
+    return current;
+}
+
 Line* makeLine_box(Box* box)
 {
     Line* l = (Line *)malloc(sizeof(Line));
@@ -13,12 +27,6 @@ Line* makeLine_box(Box* box)
     l->box = box;
     l->next = NULL;
     return l;
-}
-
-Line* linkLines(Line* current, Line* next)
-{
-    current->next = next;
-    return current;
 }
 
 Line* connectBoxOnLine(Line* currentLineOfBox, Connection* connects, Line* nextLine)
@@ -32,6 +40,8 @@ Box* makeBox(char* name)
 {
     Box* b = (Box *)malloc(sizeof(Box));
     b->name = name;
+    b->description = NULL;
+    b->connects = NULL;
     return b;
 }
 
@@ -73,6 +83,7 @@ Annotation* makeAnnotation_string(char* stringSequence)
 {
     Annotation* a = (Annotation*)malloc(sizeof(Annotation));
     a->stringSequence = stringSequence;
+    a->multiplicity = NULL;
     a->isEndOnly = false;
     return a;
 }
@@ -81,6 +92,7 @@ Annotation* makeAnnotation_mult(Multiplicity* mult)
 {
     Annotation* a = (Annotation*)malloc(sizeof(Annotation));
     a->multiplicity = mult;
+    a->stringSequence = NULL;
     a->isEndOnly = false;
     return a;
 }

@@ -6,3 +6,5 @@ build/
 .antlr/
 parser.output
 tokenizer/parser.output
+pretty/
+tokenizer/yuml_tokenizer.exe.stackdump
