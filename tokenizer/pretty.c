@@ -35,12 +35,13 @@ void printBox(Box *box)
 {
     printf("[ ");
     printf(box->name);
+    printf(" ");
     if (box->description != NULL)
     {
         printf("| ");
         printDescription(box->description);
     }
-    printf(" ] ");
+    printf("] ");
 
     if (box->connects != NULL)
         printConnection(box->connects);

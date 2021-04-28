@@ -61,6 +61,12 @@ echo "[Student]" | ./yuml_tokenizer.exe
 ```
 The echo command chain yields `[ Student ]`. The tokenizer is spacing out the different YUML syntax and standardizing alternate constructions.
 
+#### Tokenize script
+To simplify things, `tokenize.sh` calls the executable for you, assuming an `.exe` extension. All the data set will be tokenized and stored at the indicated folder.
+```bash
+./tokenize.sh my-tokenized-data-folder/
+```
+
 ## Testing, quality assurance
 Conveniently, the accompanying data set serves also as a test suite for the tokenizer. The `test.sh` comprehensively runs the tokenizer over the entire data set and checks whether it is working properly.
 
