@@ -5,12 +5,19 @@
 RED='\033[0;31m'
 NC='\033[0m' # No Color            
 
+# Cross-platform executable extension
+yuml_tokenizer="yuml_tokenizer.exe"
+if [ $OSTYPE -eq "linux-gnu" ]
+then
+    yuml_tokenizer="yuml_tokenizer"
+fi
+
 cd build
 
 echo "Test parsing on negative examples"
 for file in ../negatives/*.yuml
 do
-    ./yuml_tokenizer.exe < $file &> /dev/null
+    ./$yuml_tokenizer < $file &> /dev/null
     if [ $? -eq 0 ]
     then
         printf "${RED}Problem${NC} in $file\n"
@@ -25,7 +32,7 @@ for folder in "test" "train" "valid"
 do
     for file in "../../$folder/"*.yuml
     do
-        ./yuml_tokenizer.exe < $file > pretty/$folder/$(basename $file)
+        ./$yuml_tokenizer < $file > pretty/$folder/$(basename $file)
         if [ $? -ne 0 ]
         then
             printf "${RED}Problem${NC} in $file\n"
@@ -40,7 +47,7 @@ for folder in "test" "train" "valid"
 do
     for file in "pretty/$folder/"*.yuml
     do
-        ./yuml_tokenizer.exe < $file > pretty/temp.yuml
+        ./$yuml_tokenizer < $file > pretty/temp.yuml
         if [ $? -ne 0 ]
         then
             printf "${RED}Problem${NC} in $file\n"

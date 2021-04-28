@@ -8,6 +8,13 @@ then
     exit 1
 fi
 
+# Cross-platform executable extension
+yuml_tokenizer="yuml_tokenizer.exe"
+if [ $OSTYPE -eq "linux-gnu" ]
+then
+    yuml_tokenizer="yuml_tokenizer"
+fi
+
 if [ -d "$1" ]
 then
     mkdir -p "$1/test"
@@ -17,9 +24,9 @@ then
     do
         for file in $folder/*.yuml
         do
-            ./tokenizer/build/yuml_tokenizer.exe < $file > "$1/$folder/$(basename $file)"
+            ./tokenizer/build/$yuml_tokenizer < $file > "$1/$folder/$(basename $file)"
         done
     done
 else
-    ./tokenizer/build/yuml_tokenizer.exe < "$1"
+    ./tokenizer/build/$yuml_tokenizer < "$1"
 fi
