@@ -34,8 +34,7 @@ void printLine(Line *line)
 void printBox(Box *box)
 {
     printf("[ ");
-    printf(box->name);
-    printf(" ");
+    printf("%s ", box->name);
     if (box->description != NULL)
     {
         printf("| ");
@@ -118,6 +117,8 @@ void printEnd(End e)
         break;
     case RightArrow:
         printf("> ");
+        break;
+    case NoEnd:
         break;
 
     default:

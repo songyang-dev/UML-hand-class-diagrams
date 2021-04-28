@@ -25,7 +25,8 @@ typedef enum {
     Aggregation,
     Composition,
     LeftArrow,
-    RightArrow
+    RightArrow,
+    NoEnd
 } End;
 
 typedef enum {

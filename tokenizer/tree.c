@@ -85,6 +85,7 @@ Annotation* makeAnnotation_string(char* stringSequence)
     a->stringSequence = stringSequence;
     a->multiplicity = NULL;
     a->isEndOnly = false;
+    a->end = NoEnd;
     return a;
 }
 
@@ -94,6 +95,7 @@ Annotation* makeAnnotation_mult(Multiplicity* mult)
     a->multiplicity = mult;
     a->stringSequence = NULL;
     a->isEndOnly = false;
+    a->end = NoEnd;
     return a;
 }
 
@@ -103,6 +105,7 @@ Annotation* makeAnnotation_both(char* stringSequence, Multiplicity* mult)
     a->stringSequence = stringSequence;
     a->multiplicity = mult;
     a->isEndOnly = false;
+    a->end = NoEnd;
     return a;
 }
 
