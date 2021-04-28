@@ -10,7 +10,7 @@ fi
 
 # Cross-platform executable extension
 yuml_tokenizer="yuml_tokenizer.exe"
-if [ $OSTYPE -eq "linux-gnu" ]
+if [ $OSTYPE == "linux-gnu" ]
 then
     yuml_tokenizer="yuml_tokenizer"
 fi
