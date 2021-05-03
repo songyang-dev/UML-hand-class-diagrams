@@ -71,3 +71,11 @@ To simplify things, `tokenize.sh` calls the executable for you, assuming an `.ex
 Conveniently, the accompanying data set serves also as a test suite for the tokenizer. The `test.sh` comprehensively runs the tokenizer over the entire data set and checks whether it is working properly.
 
 Tests include grammar, spacing out YUML and semantics. The latter makes running the tests take at least 10 minutes and requires Internet connection, since it is using `yuml`.
+
+# Known bugs
+## Class with an interface
+When a class name contains an interface, the semi-colon separating the brackets from the name of the class may hide the name of the class.
+```
+[ << IResizeable >> ; Shape ]
+```
+This will produce only a box with `IResizeable`. But if you remove the semi-colon, the box will contain both words.
