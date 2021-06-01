@@ -3,7 +3,7 @@ The hand-written class diagram data set comes from Song Yang, who is a master's 
 
 Inspirations include the [yuml examples page](https://yuml.me/diagram/scruffy/class/samples).
 
-The project report is available in this repo's PDF, called *Extraction of UML class diagrams from English.pdf*. Check it out! It's written like a research publication.
+The project report is available in this repo's PDF, called [**Extraction of UML class diagrams from English.pdf**](https://github.com/XsongyangX/UML-hand-class-diagrams/blob/6b961c6b19d383e2b443ab04ab1260f4fb0583b4/Extraction%20of%20UML%20class%20diagrams%20from%20English.pdf). Check it out! It's written like a research publication.
 
 ## Description
 The train-test-validation split is 60-20-20. The data comes in pairs: `.txt` in English and class diagrams in [yuml](https://github.com/jaime-olivares/yuml-diagram/wiki) in `.yuml`. yUML is a textual representation of UML diagrams, e.g. the LaTex of UML.
