@@ -72,7 +72,7 @@ To simplify things, `tokenize.sh` calls the executable for you, assuming an `.ex
 ## Testing, quality assurance
 Conveniently, the accompanying data set serves also as a test suite for the tokenizer. The `test.sh` comprehensively runs the tokenizer over the entire data set and checks whether it is working properly.
 
-Tests include grammar, spacing out YUML and semantics. The latter makes running the tests take at least 10 minutes and requires Internet connection, since it is using `yuml`.
+Tests include grammar, spacing out YUML and semantics. The latter makes running the tests take at least 10 minutes and requires Internet connection, since it is using `yuml`. As such, semantic testing is in a separate script called `test-semantics.sh`. You must run `test.sh` successfully before doing semantic testing.
 
 # Known bugs
 ## Class with an interface
