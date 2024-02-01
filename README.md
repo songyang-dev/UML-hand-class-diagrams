@@ -1,5 +1,5 @@
 # The hand-written UML class diagram data set
-The hand-written class diagram data set comes from Song Yang, who is a master's student in computer science.
+The hand-written class diagram data set comes from Song Yang.
 
 Inspirations include the [yuml examples page](https://yuml.me/diagram/scruffy/class/samples).
 
